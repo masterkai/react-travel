@@ -1,30 +1,32 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from "./App.module.css";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
-import {
-  DetailPage,
-  HomePage,
-  RegisterPage,
-  SearchPage,
-  SignInPage,
-  ShoppingCartPage
-} from "./pages";
-import {Redirect} from 'react-router-dom'
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import {DetailPage, HomePage, RegisterPage, SearchPage, ShoppingCartPage, SignInPage} from "./pages";
 import {useSelector} from './redux/hooks'
+import {useDispatch} from 'react-redux'
+import {getShoppingCart} from './redux/shoppingCart/slice'
 
-const PrivateRoute = ({component,isAuthenticated,...rest}) => {
-  const routeComponent = (props) => {
-    return isAuthenticated?(
-        React.createElement(component,props)
-    ):(
-        <Redirect to={{pathname: '/signIn'}}/>
-    )
-  }
-  return <Route render={routeComponent} {...rest}/>
+
+const PrivateRoute = ({component, isAuthenticated, ...rest}) => {
+    const routeComponent = (props) => {
+        return isAuthenticated ? (
+            React.createElement(component, props)
+        ) : (
+            <Redirect to={{pathname: '/signIn'}}/>
+        )
+    }
+    return <Route render={routeComponent} {...rest}/>
 }
 
 function App() {
-  const jwt = useSelector(state => state.user.token)
+    const jwt = useSelector(state => state.user.token)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if(jwt){
+            dispatch(getShoppingCart(jwt))
+        }
+    }, [jwt])
     return (
         <div className={styles.App}>
             <BrowserRouter>
@@ -35,7 +37,7 @@ function App() {
                     <Route path="/detail/:touristRouteId" component={DetailPage}/>
                     <Route path="/search/:keywords?" component={SearchPage}/>
                     <PrivateRoute
-                        isAuthenticated={jwt!==null}
+                        isAuthenticated={jwt !== null}
                         path="/shoppingCart"
                         component={ShoppingCartPage}
                     />
