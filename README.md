@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+## System Requirements
+
+- [git][git] v2.13 or greater
+- [NodeJS][node] `12 || 14 || 15`
+- [npm][npm] v6 or greater
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
