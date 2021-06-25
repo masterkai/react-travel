@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import styles from "./App.module.css";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
-import {DetailPage, HomePage, RegisterPage, SearchPage, ShoppingCartPage, SignInPage} from "./pages";
+import {DetailPage, HomePage, RegisterPage, SearchPage, ShoppingCartPage, SignInPage, PlaceOrderPage} from "./pages";
 import {useSelector} from './redux/hooks'
 import {useDispatch} from 'react-redux'
 import {getShoppingCart} from './redux/shoppingCart/slice'
@@ -40,6 +40,11 @@ function App() {
                         isAuthenticated={jwt !== null}
                         path="/shoppingCart"
                         component={ShoppingCartPage}
+                    />
+                    <PrivateRoute
+                        isAuthenticated={jwt !== null}
+                        path="/placeOrder"
+                        component={PlaceOrderPage}
                     />
                     <Route render={() => <h1>404 not found 页面去火星了 ！</h1>}/>
                 </Switch>
